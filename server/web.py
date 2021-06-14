@@ -99,7 +99,7 @@ def http_error(writer, status):
 class HTTPRequest(object):
     
     def read_form_data(self):
-        size = int(self.headers[b'Content-Length'])
+        size = int(self.headers[b'content-length'])
         data = yield from self.reader.read(size)
         form = parse_qs(data.decode())
         self.form = form
@@ -110,7 +110,7 @@ class HTTPRequest(object):
     
     def parse_json_data(self):
         import ujson
-        size = int(self.headers[b'Content-Length'])
+        size = int(self.headers[b'content-length'])
         data = yield from self.reader.read(size)
         self.jsondata = ujson.loads(data)
         
@@ -132,7 +132,7 @@ class WebApp(object):
             if line == b'\r\n':
                 break
             key, value = line.split(b':', 1)
-            headers[key] = value.strip()
+            headers[key.lower()] = value.strip()
         return headers
 
     def handle(self, reader, writer):
