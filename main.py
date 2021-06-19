@@ -1,4 +1,5 @@
 import machine
+import time
 from neopixel import NeoPixel
 
 import gc
@@ -82,6 +83,15 @@ def wifi_config(request, response):
     asyncio.create_task(reset())
     yield from jsonify(response, request.form)
 
+def leds_init():
+    for j in range(np.n):
+        np[j] = (255, 255, 255)
+    np.write()
+    time.sleep(1)
+    for j in range(np.n):
+        np[j] = (0, 0, 0)
+    np.write()
+
 async def reset():
     print("reset")
     await asyncio.sleep(2)
@@ -90,6 +100,7 @@ async def reset():
 
 def setup():
     print("init")
+    leds_init()
     setup_wifi()
     print("connected")    
     
