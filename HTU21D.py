@@ -60,14 +60,20 @@ class HTU21D(object):
     @property
     def temperature(self):
         """Calculate temperature"""
-        raw = self._issue_measurement(self.ISSUE_TEMP_ADDRESS)
-        return -46.85 + (175.72 * raw / 65536)
+        try:
+          raw = self._issue_measurement(self.ISSUE_TEMP_ADDRESS)
+          return -46.85 + (175.72 * raw / 65536)
+        except OSError:
+          return -1
 
     @property
     def humidity(self):
-        """Calculate humidity"""
-        raw =  self._issue_measurement(self.ISSUE_HU_ADDRESS)
-        return -6 + (125.0 * raw / 65536)
+        """Calculate humidity"""        
+        try:
+          raw =  self._issue_measurement(self.ISSUE_HU_ADDRESS)
+          return -6 + (125.0 * raw / 65536)
+        except OSError:
+          return -1
 
     def test(self):
         print("estoy dentro")
