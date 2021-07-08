@@ -65,6 +65,9 @@ def sendstream(writer, file_):
             break
         yield from writer.awrite(buf, 0, line)
 
+def plain_text_start_response(writer, text, status='200'):
+    yield from start_response(writer, 'application/json', status)
+    yield from writer.awrite(text)
 
 def jsonify(writer, pydict):
     import ujson
